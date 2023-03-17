@@ -1,0 +1,56 @@
+{
+  "image": {
+    "size": [350, 350],
+    "process": {
+      "size": [50, 50],
+      "fill_color": "#ffffff",
+      "stroke_color": "#0000AA",
+      "stroke_width": 3
+    },
+    "resource": {
+      "size": [50, 50],
+      "fill_color": "#ffffff",
+      "stroke_color": "#AA0000",
+      "stroke_width": 3
+    },
+    "arrow":{
+      
+    }
+  },
+  "resources": [
+    {
+      "pos": [75, 75],
+      "name": "R1"
+    },
+    {
+      "pos": [275, 75],
+      "name": "R2"
+    },
+    {
+      "pos": [75, 275],
+      "name": "R3"
+    },
+    {
+      "pos": [275, 275],
+      "name": "R4"
+    }
+  ],
+  "processes":[
+    {
+      "pos": [75, 175],
+      "name": "P1"
+    },
+    {
+      "pos": [175, 175],
+      "name": "P2"
+    },
+    {
+      "pos": [275, 175],
+      "name": "P3"
+    },
+    {
+      "pos": [175, 275],
+      "name": "P4"
+    }
+  ]
+}
