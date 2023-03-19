@@ -20,9 +20,9 @@ def main():
         [0, 0, 1, 0]
     ]
 
-    #drawer = ProcessDrawer.ProcessDrawer(len(res), len(proc))
     drawer = ProcessDrawer.ConfigDrawer(config)
-    drawer.draw(proc, res)
+    dwg = drawer.draw(proc, res)
+    dwg.saveas("test.svg")
 
 
 if __name__ == "__main__":

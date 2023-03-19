@@ -5,6 +5,7 @@ from svgwrite import shapes, path as svgpath
 
 from . import PosUtils
 
+
 class ConfigDrawer:
     def __init__(self, config: dict) -> None:
         self._img_size = config['image']['size']
@@ -19,8 +20,8 @@ class ConfigDrawer:
         self._resources = config['resources']
         self._processes = config['processes']
 
-    def draw(self, proc_matr: list[list[int]], res_matr: list[list[int]]) -> None:
-        dwg = svgwrite.Drawing("test.svg", size=self._img_size)
+    def draw(self, proc_matr: list[list[int]], res_matr: list[list[int]]) -> svgwrite.Drawing:
+        dwg = svgwrite.Drawing(size=self._img_size)
 
         for res in self._resources:
             self._draw_resource(dwg, res)
@@ -31,14 +32,20 @@ class ConfigDrawer:
         for ri, res in enumerate(res_matr):
             for pi, proc in enumerate(res):
                 if proc == 1:
-                    self._draw_arrow(dwg, self._get_res_position(ri, pi), self._get_proc_position(pi, ri))
+                    self._draw_arrow(dwg,
+                                     self._get_res_position(ri, pi),
+                                     self._get_proc_position(pi, ri),
+                                     self._res_data['stroke_color'])
 
         for pi, proc in enumerate(proc_matr):
             for ri, res in enumerate(proc):
                 if res == 1:
-                    self._draw_arrow(dwg, self._get_proc_position(pi, ri), self._get_res_position(ri, pi))
+                    self._draw_arrow(dwg,
+                                     self._get_proc_position(pi, ri),
+                                     self._get_res_position(ri, pi),
+                                     self._proc_data['stroke_color'])
 
-        dwg.save()
+        return dwg
 
     def _draw_resource(self, dwg: svgwrite.Drawing, res: dict) -> None:
         c_pos = (res['pos'][0] - self._res_size[0] // 2, res['pos'][1] - self._res_size[1] // 2)
@@ -48,7 +55,7 @@ class ConfigDrawer:
                                     stroke=self._res_data['stroke_color'],
                                     stroke_width=self._res_data['stroke_width'])
         dwg.add(rect)
-        dwg.add(dwg.text(res['name'], res['pos']))
+        dwg.add(dwg.text(res['name'], res['pos'], dominant_baseline="middle", text_anchor="middle"))
 
     def _draw_process(self, dwg: svgwrite.Drawing, proc: dict) -> None:
         circle = shapes.Circle(proc['pos'],
@@ -57,7 +64,7 @@ class ConfigDrawer:
                                stroke=self._proc_data['stroke_color'],
                                stroke_width=self._proc_data['stroke_width'])
         dwg.add(circle)
-        dwg.add(dwg.text(proc['name'], proc['pos']))
+        dwg.add(dwg.text(proc['name'], proc['pos'], dominant_baseline="middle", text_anchor="middle"))
 
     def _get_res_position(self, ri: int, pi: int) -> tuple[int, int]:
         src = self._resources[ri]['pos']
@@ -71,18 +78,20 @@ class ConfigDrawer:
 
         return PosUtils.circle_edge_intersection(src, self._proc_rad, dst)
 
-    def _draw_arrow(self, dwg: svgwrite.Drawing, src: tuple[int, int], dst: tuple[int, int]):
+    def _draw_arrow(self, dwg: svgwrite.Drawing, src: tuple[int, int], dst: tuple[int, int], color: str = "black"):
         vx, vy = dst[0] - src[0], dst[1] - src[1]
         d = math.sqrt(pow(vx, 2) + pow(vy, 2))
 
         angle = math.degrees(math.acos(vx / d))
         angle *= -1 if vy < 0 else 1
 
+        color = self._arrow_data.get('color', color)
+
         x0, y0 = src[0], src[1]
         x1, y1 = src[0] + d, src[1]
-        h1 = 0, -d // 4
-        h2 = d // 4, 0
-        arrow = (8, 3)
+        h1 = 0, 0
+        h2 = 0, 0
+        arrow = self._arrow_data['size']
         commands = [
             f"M {x0} {y0}",
             f"C {x0 + h1[0]} {y0 + h1[1]} {x0 + h2[0]} {y0 + h2[1]} {x1}, {y1}",
@@ -90,7 +99,7 @@ class ConfigDrawer:
         ]
         path = svgpath.Path(' '.join(commands),
                             fill="none",
-                            stroke="#000000",
-                            stroke_width=1,
+                            stroke=color,
+                            stroke_width=self._arrow_data['thickness'],
                             transform=f"rotate({angle}, {src[0]}, {src[1]})")
         dwg.add(path)

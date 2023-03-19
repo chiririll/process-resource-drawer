@@ -14,7 +14,9 @@
       "stroke_width": 3
     },
     "arrow":{
-      
+      "size": [8, 3],
+      "thickness": 2,
+      "color": "#000000"
     }
   },
   "resources": [
