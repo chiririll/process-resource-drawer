@@ -2,7 +2,7 @@
   "image": {
     "size": [350, 350],
     "process": {
-      "size": [50, 50],
+      "radius": 25,
       "fill_color": "#ffffff",
       "stroke_color": "#0000AA",
       "stroke_width": 3
