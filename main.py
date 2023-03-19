@@ -22,7 +22,7 @@ def main():
 
     drawer = GraphDrawer.GraphDrawer(config)
     dwg = drawer.draw(proc, res)
-    dwg.saveas("test.svg")
+    dwg.saveas("images/example.svg")
 
 
 if __name__ == "__main__":
