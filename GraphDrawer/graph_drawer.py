@@ -6,7 +6,7 @@ from svgwrite import shapes, path as svgpath
 from . import PosUtils
 
 
-class ConfigDrawer:
+class GraphDrawer:
     def __init__(self, config: dict) -> None:
         self._img_size = config['image']['size']
 
@@ -72,13 +72,17 @@ class ConfigDrawer:
 
         return PosUtils.square_edge_intersection(src, self._res_size, dst)
 
-    def _get_proc_position(self, pi, ri):
+    def _get_proc_position(self, pi: int, ri: int) -> tuple[int, int]:
         src = self._processes[pi]['pos']
         dst = self._resources[ri]['pos']
 
         return PosUtils.circle_edge_intersection(src, self._proc_rad, dst)
 
-    def _draw_arrow(self, dwg: svgwrite.Drawing, src: tuple[int, int], dst: tuple[int, int], color: str = "black"):
+    def _draw_arrow(self,
+                    dwg: svgwrite.Drawing,
+                    src: tuple[int, int],
+                    dst: tuple[int, int],
+                    color: str = "black") -> None:
         vx, vy = dst[0] - src[0], dst[1] - src[1]
         d = math.sqrt(pow(vx, 2) + pow(vy, 2))
 

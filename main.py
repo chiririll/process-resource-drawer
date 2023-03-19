@@ -1,6 +1,6 @@
 import json
 
-import ProcessDrawer
+import GraphDrawer
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
         [0, 0, 1, 0]
     ]
 
-    drawer = ProcessDrawer.ConfigDrawer(config)
+    drawer = GraphDrawer.GraphDrawer(config)
     dwg = drawer.draw(proc, res)
     dwg.saveas("test.svg")
 
