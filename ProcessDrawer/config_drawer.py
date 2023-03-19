@@ -1,5 +1,7 @@
+import math
+
 import svgwrite
-from svgwrite import shapes
+from svgwrite import shapes, path as svgpath
 
 from . import PosUtils
 
@@ -57,11 +59,6 @@ class ConfigDrawer:
         dwg.add(circle)
         dwg.add(dwg.text(proc['name'], proc['pos']))
 
-    def _draw_arrow(self, dwg: svgwrite.Drawing, src: tuple[int, int], dst: tuple[int, int]):
-        line = shapes.Line(src, dst, stroke="#000000", stroke_width=2)
-        dwg.add(line)
-        dwg.add(shapes.Circle(dst, 5))
-
     def _get_res_position(self, ri: int, pi: int) -> tuple[int, int]:
         src = self._resources[ri]['pos']
         dst = self._processes[pi]['pos']
@@ -73,3 +70,27 @@ class ConfigDrawer:
         dst = self._resources[ri]['pos']
 
         return PosUtils.circle_edge_intersection(src, self._proc_rad, dst)
+
+    def _draw_arrow(self, dwg: svgwrite.Drawing, src: tuple[int, int], dst: tuple[int, int]):
+        vx, vy = dst[0] - src[0], dst[1] - src[1]
+        d = math.sqrt(pow(vx, 2) + pow(vy, 2))
+
+        angle = math.degrees(math.acos(vx / d))
+        angle *= -1 if vy < 0 else 1
+
+        x0, y0 = src[0], src[1]
+        x1, y1 = src[0] + d, src[1]
+        h1 = 0, -d // 4
+        h2 = d // 4, 0
+        arrow = (8, 3)
+        commands = [
+            f"M {x0} {y0}",
+            f"C {x0 + h1[0]} {y0 + h1[1]} {x0 + h2[0]} {y0 + h2[1]} {x1}, {y1}",
+            f"L {x1 - arrow[0]} {y1 + arrow[1]} M {x1} {y1} L {x1 - arrow[0]} {y1 - arrow[1]}"
+        ]
+        path = svgpath.Path(' '.join(commands),
+                            fill="none",
+                            stroke="#000000",
+                            stroke_width=1,
+                            transform=f"rotate({angle}, {src[0]}, {src[1]})")
+        dwg.add(path)
