@@ -31,19 +31,19 @@ class GraphDrawer:
 
         for ri, res in enumerate(res_matr):
             for pi, proc in enumerate(res):
-                if proc == 1:
+                if proc != 0:
                     self._draw_arrow(dwg,
                                      self._get_res_position(ri, pi),
                                      self._get_proc_position(pi, ri),
-                                     self._res_data['stroke_color'])
+                                     proc < 0)
 
         for pi, proc in enumerate(proc_matr):
             for ri, res in enumerate(proc):
-                if res == 1:
+                if res != 0:
                     self._draw_arrow(dwg,
                                      self._get_proc_position(pi, ri),
                                      self._get_res_position(ri, pi),
-                                     self._proc_data['stroke_color'])
+                                     res < 0)
 
         return dwg
 
@@ -82,14 +82,14 @@ class GraphDrawer:
                     dwg: svgwrite.Drawing,
                     src: tuple[int, int],
                     dst: tuple[int, int],
-                    color: str = "black") -> None:
+                    in_loop: bool = False) -> None:
         vx, vy = dst[0] - src[0], dst[1] - src[1]
         d = math.sqrt(pow(vx, 2) + pow(vy, 2))
 
         angle = math.degrees(math.acos(vx / d))
         angle *= -1 if vy < 0 else 1
 
-        color = self._arrow_data.get('color', color)
+        color = self._arrow_data['color'] if not in_loop else self._arrow_data['loop_color']
 
         x0, y0 = src[0], src[1]
         x1, y1 = src[0] + d, src[1]

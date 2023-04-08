@@ -4,19 +4,20 @@
     "process": {
       "radius": 25,
       "fill_color": "#ffffff",
-      "stroke_color": "#0000AA",
+      "stroke_color": "#000000",
       "stroke_width": 3
     },
     "resource": {
       "size": [50, 50],
       "fill_color": "#ffffff",
-      "stroke_color": "#AA0000",
+      "stroke_color": "#000000",
       "stroke_width": 3
     },
     "arrow":{
       "size": [8, 3],
       "thickness": 2,
-      "color": "#000000"
+      "color": "#00FF00",
+      "loop_color": "#FF0000"
     }
   },
   "resources": [
