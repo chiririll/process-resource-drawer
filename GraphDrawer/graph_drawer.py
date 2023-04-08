@@ -89,12 +89,13 @@ class GraphDrawer:
         angle = math.degrees(math.acos(vx / d))
         angle *= -1 if vy < 0 else 1
 
-        color = self._arrow_data['color'] if not in_loop else self._arrow_data['loop_color']
+        color = self._arrow_data.get('color', "black") \
+            if not in_loop else self._arrow_data.get('loop_color', "black")
 
         x0, y0 = src[0], src[1]
         x1, y1 = src[0] + d, src[1]
-        h1 = 0, 0
-        h2 = 0, 0
+        h1 = (0, -d // 4) if self._arrow_data.get('curved', False) else (0, 0)
+        h2 = (d // 4, 0) if self._arrow_data.get('curved', False) else (0, 0)
         arrow = self._arrow_data['size']
         commands = [
             f"M {x0} {y0}",
@@ -104,6 +105,6 @@ class GraphDrawer:
         path = svgpath.Path(' '.join(commands),
                             fill="none",
                             stroke=color,
-                            stroke_width=self._arrow_data['thickness'],
+                            stroke_width=self._arrow_data.get('thickness', 1),
                             transform=f"rotate({angle}, {src[0]}, {src[1]})")
         dwg.add(path)
