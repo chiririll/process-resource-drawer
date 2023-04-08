@@ -1,3 +1,5 @@
+# https://stackoverflow.com/questions/58055629/intersection-between-a-line-and-square
+
 def square_edge_intersection(square_pos: tuple[int, int],
                              square_size: tuple[int],
                              out_point: tuple[int, int]) -> tuple[int, int]:
@@ -12,7 +14,7 @@ def square_edge_intersection(square_pos: tuple[int, int],
     vy = oy - y0
 
     ex = x2 if vx > 0 else x1
-    ey = y2 if vy > 0 else x1
+    ey = y2 if vy > 0 else y1
 
     if vx == 0:
         return x0, ey
