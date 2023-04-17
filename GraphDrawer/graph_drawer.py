@@ -31,21 +31,19 @@ class GraphDrawer:
 
         for ri, res in enumerate(res_matr):
             for pi, proc in enumerate(res):
-                if proc == 0:
-                    continue
-                self._draw_arrow(dwg,
-                                 self._get_res_position(ri, pi),
-                                 self._get_proc_position(pi, ri),
-                                 proc < 0)
+                if proc != 0:
+                    self._draw_arrow(dwg,
+                                     self._get_res_position(ri, pi),
+                                     self._get_proc_position(pi, ri),
+                                     proc < 0)
 
-        for ri, res in enumerate(res_matr):
-            for pi, proc in enumerate(res):
-                if proc == 0:
-                    continue
-                self._draw_arrow(dwg,
-                                 self._get_proc_position(pi, ri),
-                                 self._get_res_position(ri, pi),
-                                 proc < 0)
+        for pi, proc in enumerate(proc_matr):
+            for ri, res in enumerate(proc):
+                if res != 0:
+                    self._draw_arrow(dwg,
+                                     self._get_proc_position(pi, ri),
+                                     self._get_res_position(ri, pi),
+                                     res < 0)
 
         return dwg
 
